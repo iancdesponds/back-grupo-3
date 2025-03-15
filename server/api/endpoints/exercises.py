@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel
 from ..db.database import get_db_connection
+
 router = APIRouter()
 
 

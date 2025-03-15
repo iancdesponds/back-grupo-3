@@ -10,7 +10,7 @@ include_routes(app)
 # Permitir acesso ao frontend (React) rodando na porta 3000
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # URL do React
+    allow_origins=["http://localhost:5173"],  # URL do React
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
