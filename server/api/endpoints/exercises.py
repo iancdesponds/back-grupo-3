@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 import json
+from datetime import datetime
+from typing import List, Optional
 from pydantic import BaseModel
 from ..db.database import get_db_connection
 router = APIRouter()
@@ -8,12 +10,12 @@ router = APIRouter()
 
 class Exercise(BaseModel):
     question: str
-    options: list[str] | None = None  # Lista de strings (ou None)
+    options: Optional[List[str]] = None  # Lista de strings (ou None)
     answer: str
     type: str  # "multiple_choice" ou "coding"
     difficulty: str  # "easy", "medium", "hard"
-
-
+    release_date: Optional[datetime] = None  # Data de liberação (pode ser None)
+    
 # Criar um exercício
 @router.post("/exercicios")
 def create_exercise(exercise: Exercise):
@@ -25,13 +27,16 @@ def create_exercise(exercise: Exercise):
     )
     cursor = conn.cursor()
     
-    # Converter opções para formato JSON
+    # converte multipla escolha um json
     options_json = json.dumps(exercise.options) if exercise.options else None
+
+    # converte a data para string
+    release_date_str = exercise.release_date.strftime('%Y-%m-%d %H:%M:%S') if exercise.release_date else None
     
-    cursor.execute('''
-    INSERT INTO exercises (question, options, answer, type, difficulty)
-    VALUES (?, ?, ?, ?, ?)
-    ''', (exercise.question, options_json, exercise.answer, exercise.type, exercise.difficulty))
+    cursor.execute(''' 
+    INSERT INTO exercises (question, options, answer, type, difficulty, release_date)
+    VALUES (?, ?, ?, ?, ?, ?) 
+    ''', (exercise.question, options_json, exercise.answer, exercise.type, exercise.difficulty, release_date_str))
     
     conn.commit()
     conn.close()
@@ -68,7 +73,10 @@ def get_exercises():
             "options": json.loads(ex[2]) if ex[2] else None,
             "answer": ex[3],
             "type": ex[4],
-            "difficulty": ex[5]
+            "difficulty": ex[5],
+            "created_at": ex[6],
+            "updated_at": ex[7],
+            "release_date": ex[8]
         }
         for ex in exercises
     ]
@@ -100,7 +108,10 @@ def get_exercise(exercise_id: int):
         "options": json.loads(exercise[2]) if exercise[2] else None,
         "answer": exercise[3],
         "type": exercise[4],
-        "difficulty": exercise[5]
+        "difficulty": exercise[5],
+        "created_at": exercise[6],
+        "updated_at": exercise[7],
+        "release_date": exercise[8]
     }
 
 # Atualizar um exercício
@@ -114,15 +125,18 @@ def update_exercise(exercise_id: int, exercise: Exercise):
     )
     cursor = conn.cursor()
     
-    # Converter opções para JSON
+    # converte multipla escolha para string
     options_json = json.dumps(exercise.options) if exercise.options else None
     
+    # converte a data para string
+    release_date_str = exercise.release_date.strftime('%Y-%m-%d %H:%M:%S') if exercise.release_date else None
+
     cursor.execute('''
     UPDATE exercises
-    SET question = ?, options = ?, answer = ?, type = ?, difficulty = ?
+    SET question = ?, options = ?, answer = ?, type = ?, difficulty = ?, release_date = ?, updated_at = CURRENT_TIMESTAMP
     WHERE id = ?
-    ''', (exercise.question, options_json, exercise.answer, type, exercise.difficulty, exercise_id))
-    
+    ''', (exercise.question, options_json, exercise.answer, exercise.type, exercise.difficulty, release_date_str, exercise_id))
+
     conn.commit()
     conn.close()
 

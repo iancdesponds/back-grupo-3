@@ -1,4 +1,3 @@
 fastapi[standard]
 uvicorn[standard]
-sqlalchemy
-aiosqlite
+bcrypt
