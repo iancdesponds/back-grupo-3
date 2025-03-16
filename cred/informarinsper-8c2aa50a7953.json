@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "informarinsper",
+  "private_key_id": "8c2aa50a7953a4334b453789368e882c418e9535",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDdrkQGgrdqyVAP\nTK7U/0QSUzuJuKONepftg+miWKkS4lgkAzkZ/vVoAOcGjGBCqYa+FD/21WTrG3js\nz53uCYpISLvf/UMHKz0LgaawCeGCIQ4/cO0kIEYJp3APPXo5ADrGMLJ1iBxLYCwd\nidq6G76vZAE1ZfNcr87UG/d/Rb8K/bQRg6Ks/qVQXy9eLaRU0sew2WJkGhvFTiLa\nv2PAfV9fnaAv4xramTjvd5mystFzweLjEXG37LJQ81PnYL9NFwKr/Q9Pq72ZGdmm\nMf+kppfWhv6mRn7i7qn0mSkyW4ChSqhV0NGw1V/uQD16kQLjXrgfkgjNdvpR5Tin\nznnrSGjfAgMBAAECggEAFE5OCTdNvCM5nqp8X01h+7hnvUCjq/t9UYfiTaPdGjo6\nhFNOlozYsjtW7i4gnn/vNEJ1mNNzkuepfC5eaJCze9XnGRLsDLWPZMTuXbS3VUIC\n5JkgV81PAmZgfjzi5mLDf3u0H85PzTBqNMB3v9F3y5LCW5T9paatsEHpj10hAqK5\nUeMROEL49IzXHp7ntkt5fhqlzurACtXtRO3KEsirxrWqA5bfbEcetKrahyIO3Jmj\nVXer/AAJi9csqBEUbEiWovQNfH8OmPfQNKEiDUGp/+PWeQyQrE4J+B99tKdQkfgu\ngP+31OzxMnzgOg5zsoRikxnAiBL2Olk9bqxc+nxTFQKBgQD5dWp/Y0WixbI+8b03\nR+6i8OWniNU/M4xhTNZOp8xchOUFLIhHcv2nf3hhG+A1vATtxRP1AiU6JBpXfR1s\n+jC9eN5Yg6m3GuVnzIdhlBat4KTuvPoXn64dJjlEMLJwKYYgirsIFl4QZswX8Scw\nNsh7vjvqtQkNag2+DW4NkjcflQKBgQDjfmFJhpicyN+oOotgijxZDK1ZdivhhtHo\nGLqbdw9GBFSEakRfhRgjt011KJy/uVZYIBKIungXq2fzXxDfvNkyOKQ1Ad9sODVR\nkjHTxcpnVtAkq21hEEMTXrg7bQJUkMgvTIlEnIecFeHPp4FjIfCorPkj+wpuSftE\nRy/GJELZowKBgDCM5JxEYuIqHeXYQJ5Itq4pulif7fjt/G1XegI28DQ1fSlDoIZf\nX/TAf1pPBZUPsdng2GB/+WTWb/YFGLwD+YZ2xrdtcJN9fZZ1HQglvUA8D32TdA0y\n+70amlymKaRgwIUG2x3Y1JfWmfQy8BCXKO/Ed37XmxpsQJ5zmK61fVr9AoGAcDww\nqUKzVl6wIWJI0ydAILrlZ0aq3YhTVQumPP8fVO7b97wp4Wpbf3t2xn9z3g8FL1Mb\nccN1blANZ/+V5pxYF7PkJ5a18MFGZOkYlh91/UfSRtUgkIuiXBMWF5NvW+NWMCe1\nbVlAelw9XOKKLitXfRBhlkPLYKA1S/lG851+MbsCgYAjeyHFj0qjsa+Spcei5TxW\n2Dra45hsxsIsDCsWCv9w0bCJ4fXqMhgdPpmSb0YMLwMwfQjqPVLkwr9EYUJftfDa\nIE3KGlvRRtRrTk+k6weRUMLGJOEG29cWSpB80IbF0Roxu2ooQVPBr83JqnTdkda+\nMZM2sjgqVxGC3BngxVgyaw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "projeto-informar@informarinsper.iam.gserviceaccount.com",
+  "client_id": "106379052572087877428",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/projeto-informar%40informarinsper.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

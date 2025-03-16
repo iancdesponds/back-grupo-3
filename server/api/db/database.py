@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS exercises (
     difficulty TEXT NOT NULL, 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
-    release_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
+    release_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    drive_file_id INTEGER DEFAULT NULL
 );
 ''')
 
@@ -29,7 +30,8 @@ CREATE TABLE IF NOT EXISTS users (
     is_staff INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    drive_folder_id INTEGER NOT NULL
 );
 ''')
 
@@ -55,3 +57,4 @@ conn.close()
 def get_db_connection():
     conn = sqlite3.connect('db_project.db')
     return conn
+    

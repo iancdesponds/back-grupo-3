@@ -170,3 +170,5 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 db_project.db
+workspace/student_code/student_code.py
+workspace/student_code/student_code.py
