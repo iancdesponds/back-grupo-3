@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS exercises (
     answer TEXT NOT NULL,
     type TEXT NOT NULL,  -- "multiple_choice" ou "coding"
     difficulty TEXT NOT NULL, 
+    test_code TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
     release_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP  

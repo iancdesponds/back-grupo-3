@@ -1,24 +1,34 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from ..db.database import get_db_connection
 import subprocess
+import tempfile
 import pytest
+import uuid
+import os
+
 
 router = APIRouter()
 
 class CodeInput(BaseModel):
     code: str
+    test_id: int
 
-# Função para salvar o código do aluno em um arquivo Python
-def save_code_to_file(code: str):
-    with open("workspace/student_code/student_code.py", "w") as file:
+# Função para salvar o código do aluno em um arquivo temporário
+def save_code_to_file(code: str, temp_dir: str):
+    file_path = os.path.join(temp_dir, "student_code.py")
+    with open(file_path, "w") as file:
         file.write(code)
+    return file_path
 
 # Função para rodar o pytest nos testes
-# Função para rodar o pytest nos testes e personalizar o feedback
-def run_pytest():
-    result = subprocess.run(['pytest', '--maxfail=5', '--disable-warnings', '--capture=no'],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    
+def run_pytest(test_directory: str) -> str:
+    result = subprocess.run(
+            ["pytest", test_directory],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+    )
     # Processar a saída do pytest para um feedback mais amigável
     feedback = ""
     if result.returncode == 0:
@@ -38,27 +48,46 @@ def run_pytest():
 
     return feedback
 
+# Endpoint para rodar os testes
 @router.post("/run-tests")
 async def run_tests_endpoint(input: CodeInput):
     code = input.code
+    test_id = input.test_id
     
-    # Salvar o código do aluno em um arquivo temporário
-    save_code_to_file(code)
-
+    # Conectar ao banco de dados SQLite
+    conn = get_db_connection()
+    cursor = conn.cursor()
     
-    # Criar o arquivo de testes com pytest
-    test_code = """
-from student_code import soma
-
-def test_soma():
-    assert soma(5, 10) == 15
-    assert soma(3, 7) == 10
-"""
-    with open("workspace/student_code/test_student_code.py", "w") as test_file:
-        test_file.write(test_code)
-
-    # Rodar o pytest para testar a função do aluno
-    pytest_output = run_pytest()
+    # Buscar o código de teste no banco de dados
+    cursor.execute("SELECT test_code FROM exercises WHERE id = ?", (test_id,))
+    test_case = cursor.fetchone()
+    conn.close()
     
-    # Retorna tanto a saída do programa quanto o feedback personalizado dos testes
+    if not test_case:
+        raise HTTPException(status_code=404, detail="Teste não encontrado.")
+    
+    # Criar um diretório temporário único para cada execução de teste
+    temp_dir = tempfile.mkdtemp(prefix=f"test_{uuid.uuid4().hex}_")
+    
+    try:
+        # Salvar o código do aluno em um arquivo temporário
+        student_code_file = save_code_to_file(code, temp_dir)
+        
+        # Criar o arquivo de testes com pytest
+        test_file_path = os.path.join(temp_dir, "test_student_code.py")
+        with open(test_file_path, "w") as test_file:
+            test_file.write(test_case[0])  # Escreve os testes do banco de dados no arquivo
+        
+        # Rodar o pytest para testar a função do aluno
+        pytest_output = run_pytest(temp_dir)
+    
+    finally:
+        # Limpeza do diretório temporário após execução
+        for root, dirs, files in os.walk(temp_dir, topdown=False):
+            for file in files:
+                os.remove(os.path.join(root, file))
+            for dir in dirs:
+                os.rmdir(os.path.join(root, dir))
+    
+    # Retorna o feedback dos testes
     return {"test_feedback": pytest_output}
