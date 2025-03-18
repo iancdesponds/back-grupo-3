@@ -10,6 +10,8 @@ router = APIRouter()
 
 
 class Exercise(BaseModel):
+    title: str  # Novo campo: título do exercício
+    lesson_id: int  # Novo campo: ID da aula associada ao exercício
     question: str
     options: Optional[List[str]] = None  # Lista de strings (ou None)
     answer: str
@@ -40,9 +42,9 @@ def create_exercise(exercise: Exercise):
     test_code_str = exercise.test_code if exercise.test_code else None
 
     cursor.execute(''' 
-    INSERT INTO exercises (question, options, answer, type, difficulty, test_code, release_date)
-    VALUES (?, ?, ?, ?, ?, ?, ?) 
-    ''', (exercise.question, options_json, exercise.answer, exercise.type, exercise.difficulty, test_code_str, release_date_str))
+    INSERT INTO exercises (title, lesson_id, question, options, answer, type, difficulty, test_code, release_date)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+    ''', (exercise.title, exercise.lesson_id, exercise.question, options_json, exercise.answer, exercise.type, exercise.difficulty, test_code_str, release_date_str))
     
     conn.commit()
     conn.close()
@@ -76,15 +78,17 @@ def get_exercises():
     return [
         {
             "id": ex[0],
-            "question": ex[1],
-            "options": json.loads(ex[2]) if ex[2] else None,
-            "answer": ex[3],
-            "type": ex[4],
-            "difficulty": ex[5],
-            "test_code": ex[6],  # Adicionando o test_code aqui
-            "created_at": ex[7],
-            "updated_at": ex[8],
-            "release_date": ex[9]
+            "title": ex[1],  # Incluindo o título
+            "lesson_id": ex[2],  # Incluindo o lesson_id
+            "question": ex[3],
+            "options": json.loads(ex[4]) if ex[4] else None,
+            "answer": ex[5],
+            "type": ex[6],
+            "difficulty": ex[7],
+            "test_code": ex[8],  # Adicionando o test_code aqui
+            "created_at": ex[9],
+            "updated_at": ex[10],
+            "release_date": ex[11]
         }
         for ex in exercises
     ]
@@ -112,20 +116,22 @@ def get_exercise(exercise_id: int):
 
     return {
         "id": exercise[0],
-        "question": exercise[1],
-        "options": json.loads(exercise[2]) if exercise[2] else None,
-        "answer": exercise[3],
-        "type": exercise[4],
-        "difficulty": exercise[5],
-        "test_code": exercise[6],  # Adicionando o test_code aqui
-        "created_at": exercise[7],
-        "updated_at": exercise[8],
-        "release_date": exercise[9]
+        "title": exercise[1],  # Incluindo o título
+        "lesson_id": exercise[2],  # Incluindo o lesson_id
+        "question": exercise[3],
+        "options": json.loads(exercise[4]) if exercise[4] else None,
+        "answer": exercise[5],
+        "type": exercise[6],
+        "difficulty": exercise[7],
+        "test_code": exercise[8],  # Adicionando o test_code aqui
+        "created_at": exercise[9],
+        "updated_at": exercise[10],
+        "release_date": exercise[11]
     }
 
 
 # Atualizar um exercício
-@router.put("/exercicios")
+@router.put("/exercicios/{exercise_id}")
 def update_exercise(exercise_id: int, exercise: Exercise):
     conn = get_db_connection()
     if not conn:
@@ -146,9 +152,9 @@ def update_exercise(exercise_id: int, exercise: Exercise):
 
     cursor.execute('''
     UPDATE exercises
-    SET question = ?, options = ?, answer = ?, type = ?, difficulty = ?, test_code = ?, release_date = ?, updated_at = CURRENT_TIMESTAMP
+    SET title = ?, lesson_id = ?, question = ?, options = ?, answer = ?, type = ?, difficulty = ?, test_code = ?, release_date = ?, updated_at = CURRENT_TIMESTAMP
     WHERE id = ?
-    ''', (exercise.question, options_json, exercise.answer, exercise.type, exercise.difficulty, test_code_str, release_date_str, exercise_id))
+    ''', (exercise.title, exercise.lesson_id, exercise.question, options_json, exercise.answer, exercise.type, exercise.difficulty, test_code_str, release_date_str, exercise_id))
 
     conn.commit()
     conn.close()
@@ -160,7 +166,7 @@ def update_exercise(exercise_id: int, exercise: Exercise):
 
 # Deletar um exercício
 @router.delete("/exercicios/{exercise_id}")
-def delete_exercise(exercise_id:int):
+def delete_exercise(exercise_id: int):
     conn = get_db_connection()
     if not conn:
         return JSONResponse(

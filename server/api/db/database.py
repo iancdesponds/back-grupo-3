@@ -6,17 +6,31 @@ cursor = conn.cursor()
 
 # cria a tabela 'exercises'
 cursor.execute('''
+CREATE TABLE IF NOT EXISTS lessons (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT,
+    release_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
+''')
+
+
+cursor.execute('''
 CREATE TABLE IF NOT EXISTS exercises (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    lesson_id INTEGER NOT NULL,
     question TEXT NOT NULL,
     options TEXT,  -- Armazena as opções em formato JSON (caso haja)
-    answer TEXT NOT NULL,
+    answer TEXT DEFAULT NULL,
     type TEXT NOT NULL,  -- "multiple_choice" ou "coding"
     difficulty TEXT NOT NULL, 
     test_code TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
-    release_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
+    release_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON DELETE CASCADE
 );
 ''')
 
