@@ -10,8 +10,8 @@ include_routes(app)
 # Permitir acesso ao frontend (React) rodando na porta 3000
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://front-grupo-3-6gxf.vercel.app"],  # URL do React
+    allow_origins=["*"],  # Permite todas as origens
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  
+    allow_headers=["*"],  
 )
